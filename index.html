@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletines Semanales - EduMedia-IAG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Colores inspirados en el logo */
+        .bg-brand-dark { background-color: #1a1a2e; }
+        .text-brand-pink { color: #e94560; }
+        .text-brand-cyan { color: #00f5d4; }
+        .border-brand-pink { border-color: #e94560; }
+        .border-brand-cyan { border-color: #00f5d4; }
+        .bg-brand-card { background-color: #1f2235; }
+
+        blockquote {
+            border-left: 4px solid #e94560;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #d1d5db;
+        }
+
+        /* Estilos para el reproductor de audio */
+        audio {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        audio::-webkit-media-controls-panel {
+            background-color: #2a2f4c;
+        }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-mute-button {
+            background-color: #e94560;
+            border-radius: 50%;
+        }
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display {
+            color: #00f5d4;
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-200">
+
+    <!-- Contenedor Principal -->
+    <div class="container mx-auto max-w-4xl p-4 sm:p-6 lg:p-8">
+
+        <!-- Cabecera -->
+        <header class="flex flex-col sm:flex-row items-center justify-between mb-8 pb-6 border-b border-gray-700">
+            <div class="flex items-center">
+                <img src="https://raultorres-ia.github.io/EduMedia-IAG/image/photo_2025-07-11_12-49-03.jpg" alt="Logo de EduMedia-IAG" class="w-24 h-24 rounded-full mr-4 border-2 border-brand-cyan shadow-lg">
+                <div>
+                    <h1 class="text-3xl lg:text-4xl font-black text-white">EduMedia-IAG</h1>
+                    <p class="text-lg text-brand-pink font-semibold">Boletines Semanales</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sección "Sobre el Grupo" -->
+        <section id="about" class="bg-brand-card p-6 rounded-xl mb-10 shadow-lg">
+            <h2 class="text-2xl font-bold text-brand-pink mb-4">🎓 Sobre EduMedia-IAG</h2>
+            <p class="mb-4">Exploramos el potencial educativo de las herramientas de Inteligencia Artificial Generativa aplicadas a la creación multimedia. Este canal está pensado para docentes, formadores y entusiastas que desean integrar audio, vídeo e imagen generados por IA en sus propuestas didácticas.</p>
+            <p class="mb-4">🔧 Compartimos recursos, resolvemos dudas técnicas y analizamos buenas prácticas en el uso de estas herramientas con intención pedagógica.</p>
+            <div class="space-y-3 text-sm">
+                <p>📲 Vinculado con el grupo <a href="https://t.me/ChatGPTedu" target="_blank" class="text-brand-cyan hover:underline">ChatGPT-IA-edu</a> y la iniciativa <a href="https://vibe-coding-educativo.github.io/" target="_blank" class="text-brand-cyan hover:underline">Vibe Coding Educativo</a>.</p>
+                <p>🌍 Seguimos los principios del <a href="https://bilateria.org/app/" target="_blank" class="text-brand-cyan hover:underline">Conocimiento Abierto</a>.</p>
+            </div>
+        </section>
+
+        <!-- Sección de Boletines -->
+        <main id="boletines">
+            <h2 class="text-3xl font-bold text-white mb-6">Últimos Boletines</h2>
+
+            <!-- Boletín Semanal -->
+            <article class="bg-brand-card p-6 sm:p-8 rounded-xl shadow-lg border border-gray-700 mb-12">
+                <header>
+                    <h3 class="text-2xl font-bold text-brand-pink mb-2">Semana del 10 al 13 de Julio</h3>
+                    <p class="text-gray-400">Boletín semanal del Canal EduMedia-IAG</p>
+                </header>
+                
+                <!-- Reproductor de audio -->
+                <div class="my-6 p-4 bg-gray-800 rounded-lg">
+                    <p class="text-gray-300 font-semibold">🎧 Escucha la versión en audio del boletín (realizado con NotebookLM)</p>
+                    <audio controls src="http://raultorres-ia.github.io/EduMedia-IAG/audio/semana_10_13_julio.wav">
+                        Tu navegador no soporta el elemento de audio.
+                    </audio>
+                </div>
+
+                <div class="prose prose-invert max-w-none text-gray-300">
+                    <blockquote>
+                        <p>"La creatividad es la inteligencia divirtiéndose."</p>
+                        <footer>— Albert Einstein</footer>
+                    </blockquote>
+                    <p class="text-sm text-gray-400 italic mt-8">Realizado con ChatGPT</p>
+                    <h4 class="text-xl font-semibold text-brand-cyan mt-4 mb-3">🔍 Introducción</h4>
+                    <p>Durante esta primera semana de vida del grupo EduMedia-IAG, las conversaciones giraron con entusiasmo en torno a las posibilidades que ofrece la IA generativa aplicada al ámbito multimedia educativo...</p>
+                    <h4 class="text-xl font-semibold text-brand-cyan mt-8 mb-3">🧠 Principales temas</h4>
+                    <ul class="space-y-6">
+                        <li><strong class="text-white">Veo 3 y generación de vídeo con voz:</strong> Se compartió el entusiasmo por la nueva versión de Veo 3. Tamara relató cómo la utiliza para enseñar lengua inglesa y personalizar contenidos, mientras Raül explicó el consumo de créditos.</li>
+                        <li><strong class="text-white">Flow: alargar vídeos con IA:</strong> Flow es una herramienta de Google para extender vídeos. Raül comentó sus limitaciones actuales, que le llevaron a pausar un cortometraje educativo.</li>
+                        <li><strong class="text-white">Creación local vs. en la nube:</strong> Se discutieron las ventajas de generar contenido localmente con herramientas como ComfyUI, Flux Context y Krita, una potente opción open source.</li>
+                        <li><strong class="text-white">Nuevos miembros y comunidad activa:</strong> Se dio la bienvenida a decenas de nuevos miembros, fomentando la formación entre iguales y el aprendizaje colectivo.</li>
+                    </ul>
+                    <h4 class="text-xl font-semibold text-brand-cyan mt-8 mb-3">🧾 Definición de términos técnicos</h4>
+                    <dl class="space-y-3">
+                        <div><dt class="font-bold text-white">ComfyUI:</dt><dd class="ml-4">Interfaz gráfica modular para flujos de generación de imágenes con IA.</dd></div>
+                        <div><dt class="font-bold text-white">Civitai:</dt><dd class="ml-4">Plataforma colaborativa donde se comparten modelos para generar imágenes con IA.</dd></div>
+                        <div><dt class="font-bold text-white">Flow:</dt><dd class="ml-4">Herramienta de Google que permite alargar vídeos generados por IA.</dd></div>
+                        <div><dt class="font-bold text-white">Krita:</dt><dd class="ml-4">Programa de ilustración digital libre, que permite conexión con IA.</dd></div>
+                        <div><dt class="font-bold text-white">Veo 3:</dt><dd class="ml-4">Modelo de generación de vídeo por IA que permite incorporar imágenes, texto y voz.</dd></div>
+                    </dl>
+                </div>
+
+                <!-- Sección de FAQ dentro del artículo -->
+                <section id="faq" class="mt-12 pt-8 border-t border-gray-700">
+                    <h2 class="text-2xl font-bold text-white mb-2">Preguntas Frecuentes</h2>
+                    <p class="text-sm text-gray-400 mb-6 italic">Contenido generado con NotebookLM</p>
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Qué es EduMedia-IAG y cuál es su objetivo principal?</h3>
+                            <p class="text-gray-300">EduMedia-IAG es un supergrupo creado por Raül Torres y Tamara Llorens, diseñado para docentes y entusiastas que desean explorar el potencial educativo de la IA Generativa (IAG) aplicada a la creación multimedia. Su objetivo es compartir recursos, resolver dudas y analizar buenas prácticas en el uso pedagógico de estas herramientas.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Qué herramientas de IAG se mencionan para vídeo?</h3>
+                            <p class="text-gray-300">Se mencionan VEO 3 y Flow (de pago, alta calidad), Qwen y Wan 2.1 (gratuitas, sin sonido), InVideo (combina clips de stock), HeyGen y Vidnoz (clonación de voz y avatares), y Kling.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Cómo se mantiene la consistencia de personajes en vídeos con IA?</h3>
+                            <p class="text-gray-300">Se proponen varias soluciones: partir de un fotograma del personaje, subir una imagen de referencia, usar prompts muy detallados o generar imágenes consistentes primero y luego animarlas (Image2Video).</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Qué editores de vídeo se recomiendan?</h3>
+                            <p class="text-gray-300">Se sugieren Filmora (licencia perpetua, local), CapCut (muy completo, popular entre jóvenes, local), Canva (en la nube) y Clipchamp (de Microsoft). Se destaca la importancia de la edición en local al trabajar con menores por seguridad y privacidad.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Qué consideraciones éticas hay al clonar voces?</h3>
+                            <p class="text-gray-300">Es crucial tener consentimiento expreso de la persona. No se debe clonar la voz de menores sin permiso. Se debe ser transparente, indicando cuándo un audio es generado por IA, y toda actividad debe tener un propósito pedagógico claro y seguro.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Hay cursos para aprender a usar estas herramientas?</h3>
+                            <p class="text-gray-300">Al ser herramientas muy nuevas, no hay cursos formales. El aprendizaje se basa en la colaboración dentro del grupo, videotutoriales (en YouTube), guías de prompts y la exploración de canales de creadores como Hilario Abad.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Cómo se aplica la IA en proyectos de radio escolar?</h3>
+                            <p class="text-gray-300">Se usa para generar carátulas (Microsoft Designer), estructurar guiones, investigar (Perplexity), crear sintonías (Suno.ai), y analizar programas, siempre con el alumnado como protagonista del proceso creativo.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-brand-pink mb-2">¿Qué diferencias hay entre usar IA local y en la nube?</h3>
+                            <p class="text-gray-300">La IA local ofrece más libertad creativa y menos censura, pero requiere un PC potente. La IA en la nube es más accesible pero tiene más restricciones, censura y posibles costes por uso. La edición local es preferible por privacidad, especialmente con menores.</p>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <!-- Pie de página -->
+        <footer class="text-center mt-12 py-8 border-t border-gray-700 text-gray-500 text-xs">
+            <p>Este resumen ha sido generado por Boletines EduMedia-IAG a partir de las conversaciones del grupo de Telegram <a href="https://t.me/EduMediaIAG" target="_blank" class="text-brand-cyan hover:underline">EduMedia-IAG</a> y puede contener omisiones, errores o imprecisiones.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

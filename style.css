@@ -1,116 +1,494 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  body {
-    @apply bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200;
+/* Tailwind CSS CDN warning fix - for production use proper installation */
+/* This is development/demo version only */
+body {
     font-family: 'Inter', sans-serif;
-  }
+}
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.1), 0 4px 6px -2px rgba(245, 158, 11, 0.05);
+}
+.tag {
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.tag.active {
+    background-color: #f59e0b; /* amber-500 */
+    color: #1e293b; /* slate-800 */
+}
+.dark .tag.active {
+    color: #ffffff;
+}
+.loader {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
-/* --- ESTILOS MEJORADOS PARA MARKDOWN --- */
-.prose-custom {
-    @apply prose-slate dark:prose-invert;
-}
-.prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {
-    @apply text-slate-900 dark:text-slate-100;
-}
-.prose-custom strong {
-    /* Negritas en color verde */
-    @apply text-green-700 dark:text-green-500 font-semibold;
-}
-.prose-custom a {
-    /* Enlaces en color verde y siempre subrayados */
-    @apply text-green-700 dark:text-green-500 hover:text-green-600 underline font-semibold;
-}
-.prose-custom ul {
-    /* Estilo para listas no ordenadas */
-    @apply list-disc pl-5;
-}
-.prose-custom ol {
-    /* Estilo para listas ordenadas */
-    @apply list-decimal pl-5;
-}
-.prose-custom li {
-    /* Margen para los elementos de la lista */
-    @apply mb-2;
-}
-.prose-custom blockquote {
-    @apply border-l-emerald-500;
-}
-/* --- FIN DE ESTILOS MEJORADOS --- */
-
-.card-highlighted {
-  @apply ring-4 ring-emerald-500/50 dark:ring-emerald-400/50 shadow-2xl;
-  transition: ring 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-#newsletter-grid {
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-#newsletter-grid.loaded {
-  opacity: 1;
-}
-
-#newsletter-grid .card {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: cardFadeIn 0.5s ease-out forwards;
-}
-
-@keyframes cardFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Modal transitions */
 #modal {
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out;
+    opacity: 0;
+    backdrop-filter: blur(0px);
 }
 #modal.flex {
-  opacity: 1;
+    opacity: 1;
+    backdrop-filter: blur(4px);
+}
+#modal > div {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+}
+#modal.flex > div {
+    transform: scale(1) translateY(0);
+    opacity: 1;
 }
 
-#modal-content {
-  transform: scale(0.95);
-  transition: transform 0.3s ease-in-out;
-}
-#modal.flex #modal-content {
-  transform: scale(1);
-}
-
-.content-fade-in {
-  animation: contentFadeIn 0.4s ease-out forwards;
-}
-
-@keyframes contentFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-#toast {
-  transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
-}
-#toast.translate-x-0 {
+/* Reading mode transitions */
+#modal-sidebar {
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateX(0);
+    opacity: 1;
 }
-
-.reading-mode #modal-main-content {
-    @apply col-span-12;
-}
-
 .reading-mode #modal-sidebar {
-    @apply hidden;
+    width: 0 !important;
+    opacity: 0;
+    transform: translateX(100%);
+    overflow: hidden;
 }
 
-.reading-mode #toggle-reading-mode {
-    @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300;
+article {
+    transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reading-mode article {
+    max-width: 65ch; /* Optimal reading width */
+}
+
+/* Smooth content fade */
+.content-fade-in {
+    animation: fadeInContent 0.4s ease-out forwards;
+}
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced modal transitions */
+#modal {
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                backdrop-filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    backdrop-filter: blur(0px);
+}
+#modal.flex {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+}
+#modal > div {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0.96) translateY(40px);
+    opacity: 0;
+}
+#modal.flex > div {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Content transitions */
+#modal-body-content, #modal-faq-content, #modal-faq-mobile {
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Table of Contents styles */
+#modal-faq-content nav a, #mobile-section-content nav a {
+    display: block;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease-in-out;
+}
+#modal-faq-content nav a:hover, #mobile-section-content nav a:hover {
+    background-color: rgb(241 245 249); /* slate-100 */
+    color: rgb(217 119 6); /* amber-600 */
+    transform: translateX(4px);
+}
+.dark #modal-faq-content nav a:hover, .dark #mobile-section-content nav a:hover {
+    background-color: rgb(51 65 85); /* slate-700 */
+    color: rgb(251 191 36); /* amber-400 */
+}
+
+/* Header transitions */
+#modal .sticky {
+    transition: background-color 0.2s ease-in-out, backdrop-filter 0.2s ease-in-out;
+}
+
+/* Button transitions */
+.read-more-btn, .expand-keywords, .collapse-keywords {
+    transition: all 0.2s ease-in-out;
+}
+.read-more-btn:hover {
+    transform: translateY(-1px);
+}
+.expand-keywords:hover, .collapse-keywords:hover {
+    transform: scale(1.05);
+}
+
+/* Navigation buttons transitions */
+#nav-content, #nav-faq, #toggle-reading-mode {
+    transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+#nav-content:hover, #nav-faq:hover, #toggle-reading-mode:hover {
+    transform: translateY(-1px);
+}
+
+/* Card animations */
+.card {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease-in-out;
+}
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.1), 
+                0 10px 10px -5px rgba(245, 158, 11, 0.04);
+}
+
+/* Grid animations */
+#newsletter-grid {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+#newsletter-grid.loaded {
+    opacity: 1;
+}
+#newsletter-grid .card {
+    animation: slideInUp 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+@keyframes slideInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Media container transitions */
+#modal-video-container {
+    transition: padding 0.3s ease-in-out, margin 0.3s ease-in-out;
+}
+
+/* Light Theme Prose */
+.prose-custom { 
+    color: #374151; 
+    line-height: 1.8;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+.prose-custom.prose-lg {
+    font-size: 18px;
+    line-height: 1.8;
+}
+.prose-custom.prose-sm {
+    font-size: 14px;
+    line-height: 1.7;
+}
+.prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4, .prose-custom h5, .prose-custom h6 { 
+    color: #111827; 
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.3;
+    transition: color 0.2s ease-in-out;
+}
+.prose-custom h1 { 
+    font-size: 2.5rem; 
+    border-bottom: 3px solid #f59e0b; 
+    padding-bottom: 0.75rem; 
+    margin-top: 0;
+    transition: border-color 0.2s ease-in-out, font-size 0.3s ease-in-out;
+}
+.prose-custom h2 { 
+    font-size: 1.875rem; 
+    border-bottom: 2px solid #fbbf24; 
+    padding-bottom: 0.5rem;
+    transition: border-color 0.2s ease-in-out, font-size 0.3s ease-in-out;
+}
+.prose-custom h3 { 
+    font-size: 1.5rem; 
+    color: #d97706;
+    transition: color 0.2s ease-in-out, font-size 0.3s ease-in-out;
+}
+.prose-custom h4 { 
+    font-size: 1.25rem; 
+    color: #92400e;
+    transition: color 0.2s ease-in-out, font-size 0.3s ease-in-out;
+}
+.prose-custom p { 
+    margin-bottom: 1.5rem;
+    transition: margin 0.2s ease-in-out;
+}
+.prose-custom ul, .prose-custom ol { 
+    margin-bottom: 1.5rem; 
+    padding-left: 1.75rem;
+    transition: margin 0.2s ease-in-out, padding 0.2s ease-in-out;
+}
+.prose-custom li { 
+    margin-bottom: 0.75rem;
+    transition: margin 0.2s ease-in-out;
+}
+.prose-custom a { 
+    color: #c2410c; 
+    text-decoration: underline;
+    transition: color 0.2s ease-in-out;
+}
+.prose-custom a:hover { color: #ea580c; }
+.prose-custom strong { 
+    color: #a16207; 
+    font-weight: 600;
+    transition: color 0.2s ease-in-out;
+}
+.prose-custom blockquote { 
+    border-left: 4px solid #f59e0b; 
+    color: #4b5563; 
+    margin: 2rem 0;
+    padding-left: 1.5rem;
+    font-style: italic;
+    background-color: #fffbeb;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 1.1em;
+    transition: all 0.3s ease-in-out;
+}
+.prose-custom code { 
+    color: #be123c; 
+    background-color: #f3f4f6; 
+    padding: 0.25em 0.5em; 
+    border-radius: 0.375rem;
+    font-size: 0.875em;
+    font-family: 'Roboto Mono', monospace;
+    transition: all 0.2s ease-in-out;
+}
+.prose-custom pre { 
+    background-color: #f3f4f6; 
+    color: #374151;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+    transition: all 0.3s ease-in-out;
+}
+.prose-custom pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Reading mode */
+.reading-mode #modal-sidebar {
+    display: none !important;
+}
+.reading-mode article {
+    max-width: 65ch; /* Optimal reading width */
+}
+
+/* Media container in new layout */
+#modal-video-container:not(:empty) {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    padding: 2rem;
+    margin-bottom: 0;
+}
+.dark #modal-video-container:not(:empty) {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+}
+
+/* Dark Theme Prose */
+.dark .prose-custom { color: #d1d5db; }
+.dark .prose-custom h1, .dark .prose-custom h2, .dark .prose-custom h3, .dark .prose-custom h4, .dark .prose-custom h5, .dark .prose-custom h6 { color: #f9fafb; }
+.dark .prose-custom h1 { border-bottom-color: #f59e0b; }
+.dark .prose-custom h2 { border-bottom-color: #fbbf24; }
+.dark .prose-custom h3 { color: #fbbf24; }
+.dark .prose-custom h4 { color: #fde047; }
+.dark .prose-custom a { color: #fb923c; }
+.dark .prose-custom a:hover { color: #fdba74; }
+.dark .prose-custom strong { color: #fde047; }
+.dark .prose-custom blockquote { 
+    border-left-color: #f59e0b; 
+    color: #9ca3af;
+    background-color: #1f2937;
+}
+.dark .prose-custom code { color: #fda4af; background-color: #374151; }
+.dark .prose-custom pre { background-color: #1f2937; color: #d1d5db; }
+
+audio {
+    filter: invert(0.1);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+audio:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+.dark audio {
+    filter: invert(0.9) sepia(0.1) saturate(0.8) hue-rotate(180deg);
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid #334155;
+}
+.dark audio:hover {
+    border-color: #f59e0b;
+    box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+}
+
+/* Audio player in cards */
+.media-container audio {
+    margin: 0;
+    width: 100%;
+}
+
+/* Audio player in full size modal */
+#modal-video-container audio {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Toast notifications */
+#toast {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Card highlight effect for direct links */
+.card-highlighted {
+    position: relative;
+    animation: highlight-pulse 3s ease-in-out;
+    border: 3px solid #f59e0b !important;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 10px 30px rgba(245, 158, 11, 0.2) !important;
+    transform: scale(1.02) !important;
+    z-index: 10;
+}
+
+.card-highlighted::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: linear-gradient(45deg, #f59e0b, #fbbf24, #f59e0b, #fbbf24);
+    border-radius: 12px;
+    z-index: -1;
+    animation: glow-border 3s ease-in-out;
+}
+
+.card-highlighted::after {
+    content: '📍 Boletín seleccionado';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f59e0b;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: badge-appear 3s ease-in-out;
+}
+
+@keyframes highlight-pulse {
+    0% { 
+        border-color: #f59e0b;
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 10px 30px rgba(245, 158, 11, 0.2);
+        transform: scale(1.02);
+    }
+    50% { 
+        border-color: #fbbf24;
+        box-shadow: 0 0 30px rgba(251, 191, 36, 0.6), 0 15px 40px rgba(251, 191, 36, 0.3);
+        transform: scale(1.03);
+    }
+    100% { 
+        border-color: #f59e0b;
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 10px 30px rgba(245, 158, 11, 0.2);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes glow-border {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+@keyframes badge-appear {
+    0% { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(-10px) scale(0.8); 
+    }
+    20% { 
+        opacity: 1; 
+        transform: translateX(-50%) translateY(0) scale(1); 
+    }
+    80% { 
+        opacity: 1; 
+        transform: translateX(-50%) translateY(0) scale(1); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translateX(-50%) translateY(-10px) scale(0.8); 
+    }
+}
+
+/* Dark theme adjustments for highlighted card */
+.dark .card-highlighted::after {
+    background: #fbbf24;
+    color: #111827;
+}
+
+/* Share button in cards */
+.share-btn {
+    transition: all 0.2s ease-in-out;
+    opacity: 0.7;
+}
+.share-btn:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+
+/* Ocultar etiqueta “Boletín seleccionado” sin afectar borde ni resplandor */
+.card-highlighted::after,
+.dark .card-highlighted::after {
+    content: none !important;
+}
+
+
+/* Suavizar el fondo interior de la tarjeta resaltada sin alterar el borde ni el resplandor */
+.card-highlighted {
+    background-color: #fff7e6 !important; /* Amber-100, tono suave */
+}
+
+/* Ajuste correspondiente para el tema oscuro */
+.dark .card-highlighted {
+    background-color: #3b2f14 !important; /* Suave ámbar oscuro */
 }

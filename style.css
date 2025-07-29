@@ -87,36 +87,17 @@
     @apply prose-slate dark:prose-invert;
 }
 .prose-custom a {
+    /* Esta regla ya estaba bien, asegura que los enlaces tengan el color del tema */
     @apply text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 no-underline hover:underline;
 }
 .prose-custom blockquote {
     @apply border-l-emerald-500;
 }
 .prose-custom strong {
-    @apply text-slate-800 dark:text-slate-200;
+    /* --- ESTA ES LA REGLA CORREGIDA --- */
+    /* Cambiamos el color de las negritas para que coincida con el tema */
+    @apply text-emerald-600 dark:text-emerald-400 font-semibold;
 }
 .prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {
     @apply text-slate-900 dark:text-slate-100;
-}
-
-/* --- CÓDIGO AÑADIDO --- */
-
-/* Título "Resumen" y "Contenido" */
-#modal-main-content .prose-custom h3 {
-  color: #10b981; /* Color emerald-500 */
-}
-
-.dark #modal-main-content .prose-custom h3 {
-  color: #34d399; /* Color emerald-400 */
-}
-
-/* Enlaces y Negritas dentro del contenido del boletín */
-#modal-main-content .prose-custom a,
-#modal-main-content .prose-custom strong {
-    color: #10b981; /* Color emerald-500 */
-}
-
-.dark #modal-main-content .prose-custom a,
-.dark #modal-main-content .prose-custom strong {
-    color: #34d399; /* Color emerald-400 */
 }

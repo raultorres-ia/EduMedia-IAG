@@ -100,15 +100,23 @@
 }
 
 /* --- CÓDIGO AÑADIDO --- */
-/* Estilos para los títulos del visor de boletines */
 
-/* Título "Resumen" (panel izquierdo) */
-/* El h3 es generado por Markdown, por eso se le apunta así. */
+/* Título "Resumen" y "Contenido" */
 #modal-main-content .prose-custom h3 {
-  color: #10b981; /* Color emerald-500 para modo claro */
+  color: #10b981; /* Color emerald-500 */
 }
 
-/* El mismo título en modo oscuro */
 .dark #modal-main-content .prose-custom h3 {
-  color: #34d399; /* Color emerald-400 para modo oscuro */
+  color: #34d399; /* Color emerald-400 */
+}
+
+/* Enlaces y Negritas dentro del contenido del boletín */
+#modal-main-content .prose-custom a,
+#modal-main-content .prose-custom strong {
+    color: #10b981; /* Color emerald-500 */
+}
+
+.dark #modal-main-content .prose-custom a,
+.dark #modal-main-content .prose-custom strong {
+    color: #34d399; /* Color emerald-400 */
 }

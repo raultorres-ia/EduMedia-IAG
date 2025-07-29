@@ -55,7 +55,7 @@ let currentAudio = null; // Global audio management
 let currentDataYear = null; 
 
 // --- Config URLs ---
-const CONFIG_URL = 'https://raw.githubusercontent.com/ChatGPT-IA-edu/boletin/refs/heads/main/config.json';
+const CONFIG_URL = 'https://raw.githubusercontent.com/raultorres-ia/EduMedia-IAG/refs/heads/main/config.json';
 const CORS_PROXY = 'https://corsproxy.io/?';
 
 // --- URL Management ---

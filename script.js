@@ -288,28 +288,21 @@ async function loadAndProcessData(year) {
     }
 }
 
-// ============================================================================================
-// FUNCIÓN `parseCSV` CORREGIDA
-// Esta función ahora procesa correctamente el CSV y mapea las columnas según la estructura
-// del archivo `boletin.csv`.
-// ============================================================================================
 function parseCSV(text) {
     const lines = text.trim().split('\n');
-    const header = lines.shift(); // Quitamos la cabecera, no la usamos.
+    const header = lines.shift(); 
     
     const records = [];
     let currentRecord = '';
 
-    // Juntamos las líneas que pertenecen al mismo registro (manejo de saltos de línea dentro de campos)
     for (const line of lines) {
         currentRecord += line + '\n';
-        // Un registro termina si el número de comillas es par. Es una heurística, pero funciona para este CSV.
         if ((currentRecord.match(/"/g) || []).length % 2 === 0) {
             records.push(currentRecord.trim());
             currentRecord = '';
         }
     }
-    if (currentRecord) { // Añadir el último registro si existe
+    if (currentRecord) { 
         records.push(currentRecord.trim());
     }
 
@@ -330,15 +323,13 @@ function parseCSV(text) {
                 currentField += char;
             }
         }
-        values.push(currentField); // Añadir el último campo
+        values.push(currentField);
 
-        // Limpiamos las comillas que envuelven cada campo
         const cleanedValues = values.map(v => {
             let value = v.trim();
             if (value.startsWith('"') && value.endsWith('"')) {
                 value = value.substring(1, value.length - 1);
             }
-            // Reemplazamos las comillas dobles escapadas ("") por una sola comilla (")
             return value.replace(/""/g, '"');
         });
 
@@ -347,21 +338,15 @@ function parseCSV(text) {
             return null;
         }
 
-        // --- MAPEO DE COLUMNAS CORREGIDO ---
         return {
             id: cleanedValues[1] ? cleanedValues[1].trim() : '',
             dateInfo: parseIdToDateInfo(cleanedValues[1] ? cleanedValues[1].trim() : ''),
             title: cleanedValues[3] ? cleanedValues[3].trim() : '',
             summary: cleanedValues[4] ? cleanedValues[4].trim() : '',
-            // 'citas' ahora es el Cuerpo Principal, como en el modal
             citas: cleanedValues[5] ? cleanedValues[5].trim() : '', 
-            // 'body' ahora es el Resumen, para compatibilidad con la lógica del modal
             body: cleanedValues[4] ? cleanedValues[4].trim() : '',
-            // 'link' es el enlace al podcast/video
             link: cleanedValues[6] ? cleanedValues[6].trim() : '',
-            // 'faq' es la sección de preguntas
             faq: cleanedValues[7] ? cleanedValues[7].trim() : '',
-            // 'keywords' se extraen de la columna 8
             keywords: cleanedValues[8] ? cleanedValues[8].split(',').map(kw => kw.trim()).filter(kw => kw) : []
         };
     }).filter(item => item && item.id).sort((a, b) => b.dateInfo.startDate - a.dateInfo.startDate);
@@ -386,7 +371,6 @@ function renderCards(newsletters) {
 
         newsletters.forEach((item, index) => {
             const card = document.createElement('div');
-            // MODIFICACIÓN: Se elimina la clase 'overflow-hidden' para que el cartel no se corte.
             card.className = 'card bg-white dark:bg-slate-800 rounded-lg shadow-lg flex flex-col border border-slate-200 dark:border-slate-700';
             card.style.animationDelay = `${index * 0.05}s`;
             
@@ -625,6 +609,7 @@ function generateTableOfContents(htmlContent) {
     return { toc: tocHtml, content: tempDiv.innerHTML };
 }
 
+// --- FUNCIÓN MODIFICADA ---
 function openModal(id) {
     const item = allNewsletters.find(n => n.id === id);
     if (!item) return;
@@ -648,7 +633,7 @@ function openModal(id) {
     const mobileSectionContent = document.getElementById('mobile-section-content');
     const videoElement = document.getElementById('modal-video-container');
     
-    [bodyElement, faqDesktopElement, mobileSectionContent, videoElement].forEach(el => {
+    [bodyElement, quoteElement, faqDesktopElement, mobileSectionContent, videoElement].forEach(el => {
         if (el) {
             el.style.opacity = '0';
             el.innerHTML = '';
@@ -656,7 +641,6 @@ function openModal(id) {
     });
      if (quoteElement) {
         quoteElement.style.display = 'none';
-        quoteElement.innerHTML = '';
     }
     
     if (titleElement) titleElement.textContent = item.title;
@@ -683,29 +667,23 @@ function openModal(id) {
     window.currentNewsletterItem = item;
 
     setTimeout(() => {
-        // 'item.citas' ahora es el "Cuerpo Principal (Markdown)"
+        const titleStyle = "text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-4";
+
+        // Inyecta el Resumen (item.body) con su título en el contenedor correspondiente
+        if (bodyElement && item.body && item.body.trim() !== '') {
+            const resumeTitle = `<h3 class="${titleStyle}">Resumen</h3>`;
+            bodyElement.innerHTML = resumeTitle + marked.parse(item.body);
+            bodyElement.style.opacity = '1';
+            bodyElement.classList.add('content-fade-in');
+        }
+
+        // Inyecta el Contenido (item.citas) con su título en el otro contenedor
         if (quoteElement && item.citas && item.citas.trim() !== '') {
-            quoteElement.innerHTML = marked.parse(item.citas);
+            const contentTitle = `<h3 class="${titleStyle}">Contenido</h3>`;
+            quoteElement.innerHTML = contentTitle + marked.parse(item.citas);
             quoteElement.style.display = 'block';
             quoteElement.style.opacity = '1';
             quoteElement.classList.add('content-fade-in');
-        }
-
-        if (bodyElement) {
-            // 'item.body' ahora es el "Resumen"
-            const bodyWithTitle = `### Resumen\n\n${item.body || '*No hay contenido disponible.*'}`;
-            const processedBody = processMarkdownContent(bodyWithTitle);
-            let htmlContent = marked.parse(processedBody);
-            htmlContent = processExternalLinks(htmlContent);
-            
-            const tocData = generateTableOfContents(htmlContent);
-            htmlContent = tocData.content;
-            
-            bodyElement.innerHTML = htmlContent;
-            bodyElement.style.opacity = '1';
-            bodyElement.classList.add('content-fade-in');
-            
-            window.currentTOC = tocData.toc;
         }
         
         const processedFaq = processMarkdownContent(item.faq || '*No hay preguntas frecuentes.*');

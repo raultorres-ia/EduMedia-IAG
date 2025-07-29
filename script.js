@@ -981,36 +981,8 @@ const navFaq = document.getElementById('nav-faq');
 const toggleReadingModeBtn = document.getElementById('toggle-reading-mode');
 const modalShare = document.getElementById('modal-share');
 
-// MODIFICACIÓN: Se añade la lógica para el año 2024.
-if (yearSelector) {
-    yearSelector.addEventListener('change', (e) => {
-        const selectedValue = e.target.value;
-        if (selectedValue === '2024') {
-            window.open('https://boletinia.tiddlyhost.com/#2024', '_blank');
-            // Restablecer el desplegable al último año que tenía datos
-            e.target.value = currentDataYear;
-        } else {
-            // Si se selecciona un año válido, se actualiza el año actual y se cargan los datos.
-            currentDataYear = selectedValue;
-            loadAndProcessData(selectedValue);
-        }
-    });
-}
 if (searchInput) searchInput.addEventListener('input', applyFilters);
 if (monthFilter) monthFilter.addEventListener('change', applyFilters);
-
-if (weekFilter) {
-    weekFilter.addEventListener('change', (e) => {
-        if (e.target.value === 'anteriores-julio-2025') {
-            window.open('https://boletinia.tiddlyhost.com', '_blank');
-            e.target.value = ''; // Reset the dropdown
-            applyFilters(); // Re-apply filters to show all weeks
-        } else {
-            applyFilters();
-        }
-    });
-}
-
 if (modalClose) modalClose.addEventListener('click', closeModal);
 if (modal) {
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });

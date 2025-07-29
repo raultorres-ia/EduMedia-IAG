@@ -230,7 +230,6 @@ async function init() {
     }
 }
 
-// MODIFICACIÓN: Se añade la opción 2024 y se guarda el año actual con datos.
 function populateYearSelector() {
     const yearSelector = document.getElementById('year-selector');
     if (!yearSelector) return null;
@@ -240,18 +239,13 @@ function populateYearSelector() {
         showError("No se encontraron años en la configuración.");
         return null;
     }
-
-    // Añadir 2024 a la lista de años a mostrar
-    const allYears = ['2024', ...yearsFromConfig];
     
-    yearSelector.innerHTML = allYears.map(year => `<option value="${year}">${year}</option>`).join('');
+    yearSelector.innerHTML = yearsFromConfig.map(year => `<option value="${year}">${year}</option>`).join('');
     
     const latestYear = yearsFromConfig[0];
     yearSelector.value = latestYear;
-    currentDataYear = latestYear; // Guardar el año inicial que tiene datos.
     return latestYear;
 }
-
 
 async function loadAndProcessData(year) {
     const newsletterGrid = document.getElementById('newsletter-grid');
@@ -294,69 +288,81 @@ async function loadAndProcessData(year) {
     }
 }
 
+// ============================================================================================
+// FUNCIÓN `parseCSV` CORREGIDA
+// Esta función ahora procesa correctamente el CSV y mapea las columnas según la estructura
+// del archivo `boletin.csv`.
+// ============================================================================================
 function parseCSV(text) {
-    const rows = [];
-    let fields = [];
-    let currentField = '';
-    let inQuotes = false;
+    const lines = text.trim().split('\n');
+    const header = lines.shift(); // Quitamos la cabecera, no la usamos.
+    
+    const records = [];
+    let currentRecord = '';
 
-    text = text.trim() + '\n';
+    // Juntamos las líneas que pertenecen al mismo registro (manejo de saltos de línea dentro de campos)
+    for (const line of lines) {
+        currentRecord += line + '\n';
+        // Un registro termina si el número de comillas es par. Es una heurística, pero funciona para este CSV.
+        if ((currentRecord.match(/"/g) || []).length % 2 === 0) {
+            records.push(currentRecord.trim());
+            currentRecord = '';
+        }
+    }
+    if (currentRecord) { // Añadir el último registro si existe
+        records.push(currentRecord.trim());
+    }
 
-    for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const nextChar = text[i + 1];
-
-        if (inQuotes) {
-            if (char === '"' && nextChar === '"') {
-                currentField += '"';
-                i++;
-            } else if (char === '"') {
-                inQuotes = false;
-            } else {
-                currentField += char;
-            }
-        } else {
+    return records.map(row => {
+        const values = [];
+        let currentField = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < row.length; i++) {
+            const char = row[i];
+            
             if (char === '"') {
-                inQuotes = true;
-            } else if (char === ',') {
-                fields.push(currentField);
-                currentField = '';
-            } else if (char === '\n' || char === '\r') {
-                if (nextChar === '\n' && char === '\r') i++;
-                
-                fields.push(currentField);
-                if (fields.length > 1 || (fields.length === 1 && fields[0] !== '')) {
-                    rows.push(fields);
-                }
-                fields = [];
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                values.push(currentField);
                 currentField = '';
             } else {
                 currentField += char;
             }
         }
-    }
+        values.push(currentField); // Añadir el último campo
 
-    return rows.slice(1).map(values => {
-        if (values.length < 9) {
-            console.warn('Fila descartada por tener menos de 9 columnas:', values);
+        // Limpiamos las comillas que envuelven cada campo
+        const cleanedValues = values.map(v => {
+            let value = v.trim();
+            if (value.startsWith('"') && value.endsWith('"')) {
+                value = value.substring(1, value.length - 1);
+            }
+            // Reemplazamos las comillas dobles escapadas ("") por una sola comilla (")
+            return value.replace(/""/g, '"');
+        });
+
+        if (cleanedValues.length < 9) {
+            console.warn('Fila descartada por tener menos de 9 columnas:', cleanedValues);
             return null;
         }
 
-        const keywordsRaw = values.length > 9 ? values.slice(9)
-            .flatMap(kwCell => kwCell.split(','))
-            .map(kw => kw.trim())
-            .filter(kw => kw) : [];
-
+        // --- MAPEO DE COLUMNAS CORREGIDO ---
         return {
-            id: values[1].trim(),
-            dateInfo: parseIdToDateInfo(values[1].trim()),
-            title: values[3].trim(),
-            summary: values[4].trim(),
-            citas: values[5] ? values[5].trim() : '',
-            body: values[6] ? values[6].trim() : '',
-            link: values[7] ? values[7].trim() : '',
-            faq: values[8] ? values[8].trim() : '',
-            keywords: keywordsRaw
+            id: cleanedValues[1] ? cleanedValues[1].trim() : '',
+            dateInfo: parseIdToDateInfo(cleanedValues[1] ? cleanedValues[1].trim() : ''),
+            title: cleanedValues[3] ? cleanedValues[3].trim() : '',
+            summary: cleanedValues[4] ? cleanedValues[4].trim() : '',
+            // 'citas' ahora es el Cuerpo Principal, como en el modal
+            citas: cleanedValues[5] ? cleanedValues[5].trim() : '', 
+            // 'body' ahora es el Resumen, para compatibilidad con la lógica del modal
+            body: cleanedValues[4] ? cleanedValues[4].trim() : '',
+            // 'link' es el enlace al podcast/video
+            link: cleanedValues[6] ? cleanedValues[6].trim() : '',
+            // 'faq' es la sección de preguntas
+            faq: cleanedValues[7] ? cleanedValues[7].trim() : '',
+            // 'keywords' se extraen de la columna 8
+            keywords: cleanedValues[8] ? cleanedValues[8].split(',').map(kw => kw.trim()).filter(kw => kw) : []
         };
     }).filter(item => item && item.id).sort((a, b) => b.dateInfo.startDate - a.dateInfo.startDate);
 }
@@ -474,7 +480,6 @@ function populateFilterOptions(newsletters) {
     
     let weekOptionsHTML = '<option value="">Todas las semanas</option>';
     weekOptionsHTML += [...weeks].sort((a,b) => a-b).map(w => `<option value="${w}">${formatWeekDisplay(w, yearForWeeks)}</option>`).join('');
-    weekOptionsHTML += '<option value="anteriores-julio-2025" style="font-weight: bold; color: #059669;">Anteriores a julio de 2025</option>';
     weekFilter.innerHTML = weekOptionsHTML;
 }
 
@@ -678,16 +683,16 @@ function openModal(id) {
     window.currentNewsletterItem = item;
 
     setTimeout(() => {
-        // --- INICIO DE LA CORRECCIÓN ---
+        // 'item.citas' ahora es el "Cuerpo Principal (Markdown)"
         if (quoteElement && item.citas && item.citas.trim() !== '') {
-            quoteElement.innerHTML = marked.parse(item.citas); // MODIFICADO: Usar marked.parse()
+            quoteElement.innerHTML = marked.parse(item.citas);
             quoteElement.style.display = 'block';
             quoteElement.style.opacity = '1';
             quoteElement.classList.add('content-fade-in');
         }
-        // --- FIN DE LA CORRECCIÓN ---
 
         if (bodyElement) {
+            // 'item.body' ahora es el "Resumen"
             const bodyWithTitle = `<h3>Resumen</h3>\n${item.body || '*No hay contenido disponible.*'}`;
             const processedBody = processMarkdownContent(bodyWithTitle);
             let htmlContent = marked.parse(processedBody);
@@ -905,7 +910,7 @@ function formatWeekDisplay(weekNumber, year) {
 
 function getYouTubeID(url) {
     if(!url) return null;
-    const regExp = /^.*(http:\/\/googleusercontent.com\/youtube.com\/0\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const regExp = /^.*(youtube\.com\/|youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
 }
@@ -916,13 +921,13 @@ function generateMediaEmbed(link, fullSize = false) {
     const youtubeId = getYouTubeID(link);
     if (youtubeId) {
         if (fullSize) {
-            return `<div class="relative w-full max-w-4xl mx-auto mb-8"><div class="relative pb-[56.25%] h-0"><iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="http:\/\/googleusercontent.com\/youtube.com\/1${youtubeId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>`;
+            return `<div class="relative w-full max-w-4xl mx-auto mb-8"><div class="relative pb-[56.25%] h-0"><iframe class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg" src="https://www.youtube.com/embed/${youtubeId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>`;
         } else {
-            return `<iframe width="100%" height="95" class="rounded-md" src="http:\/\/googleusercontent.com\/youtube.com\/1${youtubeId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            return `<iframe width="100%" height="95" class="rounded-md" src="https://www.youtube.com/embed/${youtubeId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         }
     }
     
-    if (link.match(/\.(mp3|wav|ogg|m4a)$/i)) {
+    if (link.match(/\.(mp3|wav|ogg|m4a)$/i) || link.includes('archive.org')) {
         const audioElement = createAudioPlayer(link, fullSize);
         return fullSize ? `<div class="w-full max-w-2xl mx-auto mb-8">${audioElement}</div>` : audioElement;
     }
@@ -938,85 +943,91 @@ function generateMediaEmbed(link, fullSize = false) {
 }
 
 // Event Listeners
-document.body.addEventListener('click', function(event) {
-    if (event.target.classList.contains('tag')) {
-        event.stopPropagation();
-        toggleKeywordFilter(event.target.textContent);
-    }
-    if (event.target.classList.contains('read-more-btn')) {
-        openModal(event.target.dataset.id);
-    }
-    if (event.target.classList.contains('expand-keywords')) {
-        event.stopPropagation();
-        expandCardKeywords(event.target.dataset.cardId);
-    }
-    if (event.target.classList.contains('collapse-keywords')) {
-        event.stopPropagation();
-        collapseCardKeywords(event.target.dataset.cardId);
-    }
-    if (event.target.dataset.headingId) {
-        event.preventDefault();
-        scrollToHeading(event.target.dataset.headingId);
-    }
-    if (event.target.closest('.share-btn')) {
-        event.stopPropagation();
-        const shareBtn = event.target.closest('.share-btn');
-        const cardId = shareBtn.dataset.shareId;
-        if (cardId) {
-            const url = new URL(window.location);
-            url.searchParams.set('boletin', cardId);
-            copyToClipboard(url.toString(), '🔗 Enlace directo copiado al portapapeles');
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function(event) {
+        if (event.target.classList.contains('tag')) {
+            event.stopPropagation();
+            toggleKeywordFilter(event.target.textContent);
         }
-    }
-});
-
-const yearSelector = document.getElementById('year-selector');
-const searchInput = document.getElementById('search-input');
-const monthFilter = document.getElementById('month-filter');
-const weekFilter = document.getElementById('week-filter');
-const modal = document.getElementById('modal');
-const modalClose = document.getElementById('modal-close');
-const navContent = document.getElementById('nav-content');
-const navFaq = document.getElementById('nav-faq');
-const toggleReadingModeBtn = document.getElementById('toggle-reading-mode');
-const modalShare = document.getElementById('modal-share');
-
-if (searchInput) searchInput.addEventListener('input', applyFilters);
-if (monthFilter) monthFilter.addEventListener('change', applyFilters);
-if (modalClose) modalClose.addEventListener('click', closeModal);
-if (modal) {
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-}
-document.addEventListener('keydown', (e) => { 
-    if (e.key === "Escape" && modal && !modal.classList.contains('hidden')) closeModal(); 
-});
-
-if (modalShare) modalShare.addEventListener('click', () => {
-    copyToClipboard(window.location.href, '🔗 Enlace del boletín copiado al portapapeles');
-});
-
-if (navContent) navContent.addEventListener('click', () => {
-    showTableOfContents();
-    const isDesktop = window.innerWidth >= 1024;
-    const targetElement = isDesktop ? document.getElementById('modal-body-content') : document.getElementById('mobile-content-section');
-    if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-});
-if (navFaq) navFaq.addEventListener('click', () => {
-    showFAQ();
-    if (window.innerWidth < 1024) {
-        const element = document.getElementById('mobile-content-section');
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (event.target.classList.contains('read-more-btn')) {
+            openModal(event.target.dataset.id);
         }
+        if (event.target.classList.contains('expand-keywords')) {
+            event.stopPropagation();
+            expandCardKeywords(event.target.dataset.cardId);
+        }
+        if (event.target.classList.contains('collapse-keywords')) {
+            event.stopPropagation();
+            collapseCardKeywords(event.target.dataset.cardId);
+        }
+        if (event.target.dataset.headingId) {
+            event.preventDefault();
+            scrollToHeading(event.target.dataset.headingId);
+        }
+        if (event.target.closest('.share-btn')) {
+            event.stopPropagation();
+            const shareBtn = event.target.closest('.share-btn');
+            const cardId = shareBtn.dataset.shareId;
+            if (cardId) {
+                const url = new URL(window.location);
+                url.searchParams.set('boletin', cardId);
+                copyToClipboard(url.toString(), '🔗 Enlace directo copiado al portapapeles');
+            }
+        }
+    });
+
+    const yearSelector = document.getElementById('year-selector');
+    const searchInput = document.getElementById('search-input');
+    const monthFilter = document.getElementById('month-filter');
+    const weekFilter = document.getElementById('week-filter');
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modal-close');
+    const navContent = document.getElementById('nav-content');
+    const navFaq = document.getElementById('nav-faq');
+    const toggleReadingModeBtn = document.getElementById('toggle-reading-mode');
+    const modalShare = document.getElementById('modal-share');
+
+    if(yearSelector) {
+        yearSelector.addEventListener('change', (e) => loadAndProcessData(e.target.value));
     }
-});
-if (toggleReadingModeBtn) toggleReadingModeBtn.addEventListener('click', () => {
-    modal.classList.toggle('reading-mode');
-});
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+    if (monthFilter) monthFilter.addEventListener('change', applyFilters);
+    if (weekFilter) weekFilter.addEventListener('change', applyFilters);
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modal) {
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    }
+    document.addEventListener('keydown', (e) => { 
+        if (e.key === "Escape" && modal && !modal.classList.contains('hidden')) closeModal(); 
+    });
 
-window.scrollToHeading = scrollToHeading;
+    if (modalShare) modalShare.addEventListener('click', () => {
+        copyToClipboard(window.location.href, '🔗 Enlace del boletín copiado al portapapeles');
+    });
 
-// --- Start the application ---
-init();
+    if (navContent) navContent.addEventListener('click', () => {
+        showTableOfContents();
+        const isDesktop = window.innerWidth >= 1024;
+        const targetElement = isDesktop ? document.getElementById('modal-body-content') : document.getElementById('mobile-content-section');
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+    if (navFaq) navFaq.addEventListener('click', () => {
+        showFAQ();
+        if (window.innerWidth < 1024) {
+            const element = document.getElementById('mobile-content-section');
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+    if (toggleReadingModeBtn) toggleReadingModeBtn.addEventListener('click', () => {
+        modal.classList.toggle('reading-mode');
+    });
+
+    window.scrollToHeading = scrollToHeading;
+
+    // --- Start the application ---
+    init();
+});

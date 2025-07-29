@@ -87,15 +87,14 @@
     @apply prose-slate dark:prose-invert;
 }
 .prose-custom a {
-    /* Esta regla ya estaba bien, asegura que los enlaces tengan el color del tema */
-    @apply text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 no-underline hover:underline;
+    /* Estilo para que los enlaces tengan el color del tema */
+    @apply text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 no-underline hover:underline font-semibold;
 }
 .prose-custom blockquote {
     @apply border-l-emerald-500;
 }
 .prose-custom strong {
-    /* --- ESTA ES LA REGLA CORREGIDA --- */
-    /* Cambiamos el color de las negritas para que coincida con el tema */
+    /* CAMBIO CLAVE: Se modifica la regla original para que las negritas tengan el color del tema */
     @apply text-emerald-600 dark:text-emerald-400 font-semibold;
 }
 .prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {

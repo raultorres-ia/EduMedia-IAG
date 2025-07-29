@@ -11,17 +11,37 @@
   }
 }
 
-/* --- ESTILOS MODIFICADOS --- */
+/* --- ESTILOS MEJORADOS PARA MARKDOWN --- */
+.prose-custom {
+    @apply prose-slate dark:prose-invert;
+}
+.prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {
+    @apply text-slate-900 dark:text-slate-100;
+}
 .prose-custom strong {
-  /* Se cambia el color de las negritas a verde en ambos modos */
-  @apply text-green-700 dark:text-green-500 font-semibold;
+    /* Negritas en color verde */
+    @apply text-green-700 dark:text-green-500 font-semibold;
 }
-
 .prose-custom a {
-  /* Se cambia el color de los enlaces a verde y se aplica subrayado permanente */
-  @apply text-green-700 dark:text-green-500 hover:text-green-600 underline font-semibold;
+    /* Enlaces en color verde y siempre subrayados */
+    @apply text-green-700 dark:text-green-500 hover:text-green-600 underline font-semibold;
 }
-/* --- FIN DE ESTILOS MODIFICADOS --- */
+.prose-custom ul {
+    /* Estilo para listas no ordenadas */
+    @apply list-disc pl-5;
+}
+.prose-custom ol {
+    /* Estilo para listas ordenadas */
+    @apply list-decimal pl-5;
+}
+.prose-custom li {
+    /* Margen para los elementos de la lista */
+    @apply mb-2;
+}
+.prose-custom blockquote {
+    @apply border-l-emerald-500;
+}
+/* --- FIN DE ESTILOS MEJORADOS --- */
 
 .card-highlighted {
   @apply ring-4 ring-emerald-500/50 dark:ring-emerald-400/50 shadow-2xl;
@@ -93,16 +113,4 @@
 
 .reading-mode #toggle-reading-mode {
     @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300;
-}
-
-.prose-custom {
-    @apply prose-slate dark:prose-invert;
-}
-
-.prose-custom blockquote {
-    @apply border-l-emerald-500;
-}
-
-.prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {
-    @apply text-slate-900 dark:text-slate-100;
 }

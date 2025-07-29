@@ -11,6 +11,18 @@
   }
 }
 
+/* --- ESTILOS MODIFICADOS --- */
+.prose-custom strong {
+  /* Se cambia el color de las negritas a verde en ambos modos */
+  @apply text-green-700 dark:text-green-500 font-semibold;
+}
+
+.prose-custom a {
+  /* Se cambia el color de los enlaces a verde y se aplica subrayado permanente */
+  @apply text-green-700 dark:text-green-500 hover:text-green-600 underline font-semibold;
+}
+/* --- FIN DE ESTILOS MODIFICADOS --- */
+
 .card-highlighted {
   @apply ring-4 ring-emerald-500/50 dark:ring-emerald-400/50 shadow-2xl;
   transition: ring 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -86,17 +98,11 @@
 .prose-custom {
     @apply prose-slate dark:prose-invert;
 }
-.prose-custom a {
-    /* Estilo para que los enlaces tengan el color del tema */
-    @apply text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 no-underline hover:underline font-semibold;
-}
+
 .prose-custom blockquote {
     @apply border-l-emerald-500;
 }
-.prose-custom strong {
-    /* CAMBIO CLAVE: Se modifica la regla original para que las negritas tengan el color del tema */
-    @apply text-emerald-600 dark:text-emerald-400 font-semibold;
-}
+
 .prose-custom h1, .prose-custom h2, .prose-custom h3, .prose-custom h4 {
     @apply text-slate-900 dark:text-slate-100;
 }

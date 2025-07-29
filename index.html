@@ -6,19 +6,19 @@
     <title>Boletín EduMedia-IAG</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        safelist: ['animate-spin']
-      }
-    </script>
 
-	<style type="text/tailwindcss">
-  /* negritas y subrayados en verde */
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    safelist: ['animate-spin']
+  }
+</script>
+
+<style type="text/tailwindcss">
+  /* verde corporativo para negritas y subrayados */
   .prose-custom :is(strong, u) {
     @apply text-emerald-600 dark:text-emerald-400 font-semibold;
   }
-  /* si quieres que el subrayado también herede el color de la aplicación */
   .prose-custom u {
     @apply underline decoration-emerald-600 dark:decoration-emerald-400;
   }

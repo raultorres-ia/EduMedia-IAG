@@ -609,7 +609,6 @@ function generateTableOfContents(htmlContent) {
     return { toc: tocHtml, content: tempDiv.innerHTML };
 }
 
-// --- FUNCIÓN MODIFICADA ---
 function openModal(id) {
     const item = allNewsletters.find(n => n.id === id);
     if (!item) return;
@@ -642,6 +641,9 @@ function openModal(id) {
      if (quoteElement) {
         quoteElement.style.display = 'none';
     }
+     if (bodyElement) {
+        bodyElement.style.display = 'none';
+    }
     
     if (titleElement) titleElement.textContent = item.title;
     if (dateElement) dateElement.textContent = item.dateInfo.displayDate;
@@ -669,26 +671,23 @@ function openModal(id) {
     setTimeout(() => {
         const titleStyle = "text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-4";
 
-        // Inyecta el Resumen (item.body) con su título en el contenedor correspondiente
         if (bodyElement && item.body && item.body.trim() !== '') {
             const resumeTitle = `<h3 class="${titleStyle}">Resumen</h3>`;
-            bodyElement.innerHTML = resumeTitle + marked.parse(item.body);
+            bodyElement.innerHTML = resumeTitle + marked.parse(processMarkdownContent(item.body));
+            bodyElement.style.display = 'block';
             bodyElement.style.opacity = '1';
             bodyElement.classList.add('content-fade-in');
         }
 
-        // Inyecta el Contenido (item.citas) con su título en el otro contenedor
         if (quoteElement && item.citas && item.citas.trim() !== '') {
             const contentTitle = `<h3 class="${titleStyle}">Contenido</h3>`;
-            quoteElement.innerHTML = contentTitle + marked.parse(item.citas);
+            quoteElement.innerHTML = contentTitle + marked.parse(processMarkdownContent(item.citas));
             quoteElement.style.display = 'block';
             quoteElement.style.opacity = '1';
             quoteElement.classList.add('content-fade-in');
         }
         
-        const processedFaq = processMarkdownContent(item.faq || '*No hay preguntas frecuentes.*');
-        let faqContent = marked.parse(processedFaq);
-        faqContent = processExternalLinks(faqContent);
+        const faqContent = marked.parse(processMarkdownContent(item.faq || '*No hay preguntas frecuentes.*'));
         if (faqDesktopElement) {
             faqDesktopElement.innerHTML = faqContent;
             faqDesktopElement.style.opacity = '1';
@@ -710,6 +709,13 @@ function openModal(id) {
             videoElement.style.opacity = '1';
             videoElement.classList.add('content-fade-in');
         }
+
+        if(bodyElement) {
+            const tocData = generateTableOfContents(quoteElement.innerHTML);
+            window.currentTOC = tocData.toc;
+            quoteElement.innerHTML = tocData.content;
+        }
+
     }, 200);
 }
 
@@ -735,12 +741,12 @@ function closeModal() {
 function scrollToHeading(headingId) {
     const heading = document.getElementById(headingId);
     if (heading) {
-        const scrollContainer = heading.closest('.overflow-y-auto');
+        const scrollContainer = heading.closest('#modal-main-content');
         
         if (scrollContainer) {
-            const headerHeight = document.querySelector('#modal .sticky').offsetHeight || 80;
+            const headerHeight = document.querySelector('#modal header').offsetHeight || 80;
             const elementPosition = heading.offsetTop;
-            const offsetPosition = elementPosition - headerHeight - 40;
+            const offsetPosition = elementPosition - headerHeight - 20;
             
             scrollContainer.scrollTo({
                 top: Math.max(0, offsetPosition),
@@ -782,9 +788,7 @@ function showFAQ() {
     const mobileSectionTitle = document.getElementById('mobile-section-title');
     
     if (window.currentNewsletterItem) {
-        const processedFaq = processMarkdownContent(window.currentNewsletterItem.faq || '*No hay preguntas frecuentes.*');
-        let faqContent = marked.parse(processedFaq);
-        faqContent = processExternalLinks(faqContent);
+        const faqContent = marked.parse(processMarkdownContent(window.currentNewsletterItem.faq || '*No hay preguntas frecuentes.*'));
         
         if (faqDesktopElement) faqDesktopElement.innerHTML = faqContent;
         if (sidebarTitle) sidebarTitle.textContent = 'Preguntas Frecuentes';

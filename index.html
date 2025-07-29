@@ -5,136 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boletín EduMedia-IAG</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-<script>
-  tailwind.config = {
-    darkMode: 'class',
-    safelist: ['animate-spin']
-  }
-</script>
-
-<style type="text/tailwindcss">
-  /* Verde corporativo para negritas (<b>/<strong>), enlaces y subrayados
-     tanto en las tarjetas (.card) como en el texto con .prose */
-  
-  .prose :is(strong, b),
-  .card  :is(strong, b) {
-    @apply text-emerald-600 dark:text-emerald-400 font-semibold;
-  }
-
-  .prose a,
-  .card  a {
-    @apply text-emerald-600 dark:text-emerald-400 hover:text-emerald-500
-           no-underline hover:underline font-semibold;
-  }
-
-  .prose u,
-  .card  u {
-    @apply underline decoration-emerald-600 dark:decoration-emerald-400;
-  }
-</style>
+    <!-- Tailwind CSS Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Habilita el modo oscuro basado en clases (ej: class="dark")
+        }
+    </script>
     
-    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js" defer></script>
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+    <!-- Link to external CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-emerald-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-300">
 
+    <!-- Header -->
     <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-20 py-4 px-4 md:px-8">
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4">
-                <img src="https://raultorres-ia.github.io/EduMedia-IAG/image/photo_2025-07-11_12-49-03.jpg" alt="Logo EduMedia-IAG" class="h-12 md:h-14 w-auto rounded-md">
+                <img src="https://raultorres-ia.github.io/EduMedia-IAG/image/photo_2025-07-11_12-49-03.jpg" alt="Logo EduMedia-IAG" class="h-12 md:h-14 w-auto">
                 <div class="text-left">
                     <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
-                        Boletín Semanal <a href="https://chatgpt-ia-edu.github.io" target="_blank" rel="noopener noreferrer" class="text-emerald-600 dark:text-emerald-500 hover:underline">EduMedia-IAG</a>
+                        Boletín Semanal <a href="https://t.me/EduMediaIAG" target="_blank" rel="noopener noreferrer" class="text-amber-600 dark:text-amber-500 hover:underline">EduMedia-IAG</a>
                     </h1>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Resumen de conversaciones del grupo de Telegram.</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Resumen de conversaciones del grupo de Telegram</p>
                 </div>
             </div>
             <div class="flex items-center gap-4">
                 <button id="theme-toggle" class="p-2 rounded-md text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" aria-label="Cambiar tema">
-                    <!-- Icon will be inserted by JS -->
+                    <!-- SVG icon will be injected here by JS -->
                 </button>
-                <select id="year-selector" class="bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 rounded-md shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-500 focus:ring-opacity-50"></select>
+                <select id="year-selector" class="bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 rounded-md shadow-sm focus:border-amber-500 focus:ring focus:ring-amber-500 focus:ring-opacity-50"></select>
             </div>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="container mx-auto p-4 md:p-8">
 
-        <!-- About Section - Preserved and restyled -->
-        <section class="mb-12 bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold text-emerald-600 dark:text-emerald-500 mb-4 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                Sobre EduMedia-IAG
-            </h2>
-            <p class="text-slate-600 dark:text-slate-400 mb-4">
-                Exploramos el potencial educativo de las herramientas de Inteligencia Artificial Generativa aplicadas a la creación multimedia. Este canal está pensado para docentes, formadores y entusiastas que desean integrar audio, vídeo e imagen generados por IA en sus propuestas didácticas.
-            </p>
-            <ul class="space-y-2 text-slate-700 dark:text-slate-300">
-                <li class="flex items-start gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mt-1 text-emerald-600 dark:text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-                    <span>Vinculado con el grupo <a href="https://t.me/ChatGPTedu" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 dark:text-emerald-500 hover:underline">ChatGPT-IA-edu</a> y la iniciativa <a href="https://vibe-coding-educativo.github.io/" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 dark:text-emerald-500 hover:underline">Vibe Coding Educativo</a>.</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mt-1 text-emerald-600 dark:text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m-9 9a9 9 0 019-9" /></svg>
-                    <span>Seguimos los principios del <a href="https://conocimiento-abierto.github.io/" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 dark:text-emerald-500 hover:underline">Conocimiento Abierto</a>.</span>
-                </li>
-            </ul>
-        </section>
-
+        <!-- Filters and Search -->
         <div class="mb-8 p-4 bg-white dark:bg-slate-800 rounded-lg shadow-md">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label for="search-input" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Buscar</label>
-                    <input type="text" id="search-input" placeholder="Buscar por título, resumen..." class="w-full rounded-md shadow-sm bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:border-emerald-500 focus:ring focus:ring-emerald-500 focus:ring-opacity-50">
+                    <input type="text" id="search-input" placeholder="Buscar por título, resumen..." class="w-full rounded-md shadow-sm bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:ring focus:ring-amber-500 focus:ring-opacity-50">
                 </div>
                 <div>
                     <label for="month-filter" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Filtrar por Mes</label>
-                    <select id="month-filter" class="w-full rounded-md shadow-sm bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:border-emerald-500 focus:ring focus:ring-emerald-500 focus:ring-opacity-50">
+                    <select id="month-filter" class="w-full rounded-md shadow-sm bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:ring focus:ring-amber-500 focus:ring-opacity-50">
                         <option value="">Todos los meses</option>
                     </select>
                 </div>
                 <div>
                     <label for="week-filter" class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Filtrar por Semana</label>
-                    <select id="week-filter" class="w-full rounded-md shadow-sm bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:border-emerald-500 focus:ring focus:ring-emerald-500 focus:ring-opacity-50">
+                    <select id="week-filter" class="w-full rounded-md shadow-sm bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:border-amber-500 focus:ring focus:ring-amber-500 focus:ring-opacity-50">
                         <option value="">Todos las semanas</option>
                     </select>
                 </div>
             </div>
         </div>
 
+        <!-- Loading Spinner -->
         <div id="loader" class="flex justify-center items-center py-20">
-            <div class="loader animate-spin ease-linear rounded-full border-8 border-t-8 border-slate-200 dark:border-slate-600 h-32 w-32"></div>
+            <div class="loader ease-linear rounded-full border-8 border-t-8 border-slate-200 dark:border-slate-600 h-32 w-32" style="border-top-color: #f59e0b;"></div>
         </div>
         
+        <!-- No Results Message -->
         <div id="no-results" class="text-center py-20 hidden">
             <h2 class="text-2xl font-bold text-slate-600 dark:text-slate-400">No se encontraron boletines</h2>
             <p class="text-slate-500 dark:text-slate-500 mt-2">Prueba a cambiar los filtros o el término de búsqueda.</p>
         </div>
 
+        <!-- Newsletter Grid -->
         <div id="newsletter-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 loaded"></div>
     </main>
 
+    <!-- Modal for full newsletter -->
     <div id="modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center p-0">
         <div class="bg-white dark:bg-slate-900 w-full h-full flex flex-col">
+            <!-- Header -->
             <div class="flex justify-between items-center p-4 md:p-6 border-b border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm sticky top-0 z-10">
                 <div class="flex-1 min-w-0">
                     <h2 id="modal-title" class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white truncate pr-4"></h2>
-                    <p id="modal-date" class="text-sm text-emerald-600 dark:text-emerald-400 font-medium mt-1"></p>
+                    <p id="modal-date" class="text-sm text-amber-600 dark:text-amber-400 font-medium mt-1"></p>
                 </div>
                 <div class="flex items-center gap-3">
+                    <!-- Quick navigation -->
                     <nav class="hidden md:flex items-center gap-3 text-sm">
-                        <button id="nav-content" class="text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Contenido</button>
+                        <button id="nav-content" class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Contenido</button>
                         <span class="text-slate-300 dark:text-slate-600">|</span>
-                        <button id="nav-faq" class="text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">FAQ</button>
+                        <button id="nav-faq" class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">FAQ</button>
                         <span class="text-slate-300 dark:text-slate-600">|</span>
-                        <button id="modal-share" class="text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1" title="Copiar enlace directo">
+                        <button id="modal-share" class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors flex items-center gap-1" title="Copiar enlace directo">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
                                 <polyline points="16,6 12,2 8,6"/>
@@ -143,7 +113,7 @@
                             Compartir
                         </button>
                         <span class="text-slate-300 dark:text-slate-600">|</span>
-                        <button id="toggle-reading-mode" class="text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                        <button id="toggle-reading-mode" class="text-slate-600 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
@@ -154,43 +124,50 @@
                 </div>
             </div>
             
+            <!-- Content -->
             <div class="flex-1 overflow-hidden">
                 <div class="h-full flex">
+                    <!-- Main content area -->
                     <div class="flex-1 overflow-y-auto">
                         <div class="max-w-4xl mx-auto">
+                            <!-- Media section -->
                             <div id="modal-video-container" class="w-full"></div>
-
+                            
+                            <!-- Article-style content -->
                             <article class="max-w-3xl mx-auto px-6 md:px-8 py-8">
                                 <div id="modal-body-content" class="prose prose-custom prose-lg max-w-none"></div>
                             </article>
-				<div id="modal-quote-container" class="max-w-3xl mx-auto px-6 md:px-8"></div>
                         </div>
                     </div>
                     
-                    <aside id="modal-sidebar" class="hidden lg:block w-96 flex-shrink-0 bg-slate-50 dark:bg-slate-800/50 border-l border-slate-200 dark:border-slate-700 overflow-y-auto">
-			    <div class="p-6">
-				<h3 class="text-lg font-bold text-emerald-600 dark:text-emerald-400 mb-4">Preguntas Frecuentes</h3>
-				<div id="modal-faq-content" class="prose prose-custom prose-sm max-w-none"></div>
-			    </div>
-			</aside>
+                    <!-- Sidebar -->
+                    <aside id="modal-sidebar" class="hidden lg:block w-80 bg-slate-50 dark:bg-slate-800/50 border-l border-slate-200 dark:border-slate-700 overflow-y-auto">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Preguntas Frecuentes</h3>
+                            <div id="modal-faq-content" class="prose prose-custom prose-sm max-w-none"></div>
+                        </div>
+                    </aside>
                 </div>
                 
+                <!-- Mobile FAQ/TOC section -->
                 <section id="mobile-content-section" class="lg:hidden border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
-		    <div class="max-w-3xl mx-auto px-6 md:px-8 py-8">
-			<h3 id="mobile-section-title" class="text-xl font-bold text-emerald-600 dark:text-emerald-400 mb-4">Preguntas Frecuentes</h3>
-			<div id="mobile-section-content" class="prose prose-custom max-w-none"></div>
-		    </div>
-		</section>
+                    <div class="max-w-3xl mx-auto px-6 md:px-8 py-8">
+                        <h3 id="mobile-section-title" class="text-xl font-semibold text-slate-900 dark:text-white mb-4">Preguntas Frecuentes</h3>
+                        <div id="mobile-section-content" class="prose prose-custom max-w-none"></div>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
     
+    <!-- Footer -->
     <footer id="page-footer" class="mt-12 py-6 border-t border-slate-200 dark:border-slate-700 text-center text-slate-500 dark:text-slate-400 text-sm">
-        <div>
-            <a href="https://chatgpt-ia-edu.github.io/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">Visita la página de la comunidad</a>
-        </div>
+        <a href="https://t.me/EduMediaIAG" target="_blank" rel="noopener noreferrer" class="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+            Visita la web de EduMedia-IAG
+        </a>
     </footer>
 
+    <!-- Link to external JS file -->
     <script src="script.js" defer></script>
 </body>
 </html>

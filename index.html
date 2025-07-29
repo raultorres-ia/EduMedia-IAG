@@ -15,14 +15,20 @@
 </script>
 
 <style type="text/tailwindcss">
-  /* verde corporativo para negritas y subrayados en todo el boletín */
-  :is(.prose, .card) :is(strong, u) {
+  /* verde corporativo para negritas, enlaces y subrayados en todo el boletín */
+  :is(.prose, .card) :is(strong, b) {
     @apply text-emerald-600 dark:text-emerald-400 font-semibold;
   }
+
+  :is(.prose, .card) a {
+    @apply text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 no-underline hover:underline font-semibold;
+  }
+
   :is(.prose, .card) u {
     @apply underline decoration-emerald-600 dark:decoration-emerald-400;
   }
 </style>
+
 
 
     

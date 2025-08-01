@@ -411,13 +411,12 @@ function renderCards(newsletters) {
             
             const remainingCount = item.keywords.length - 3;
             const expandButton = !isExpanded && remainingCount > 0
-    ? `<span class="expand-keywords text-xs text-amber-600 dark:text-amber-400 hover:text-amber-500 cursor-pointer font-medium" data-card-id="${item.id}">+${remainingCount} más</span>`
+    ? `<span class="expand-keywords text-xs text-[#c7304f] dark:text-[#f06a8a] hover:text-[#e94560] cursor-pointer font-medium" data-card-id="${item.id}">+${remainingCount} más</span>`
     : '';
 
 const collapseButton = isExpanded && item.keywords.length > 3
-    ? `<span class="collapse-keywords text-xs text-amber-600 dark:text-amber-400 hover:text-amber-500 cursor-pointer font-medium" data-card-id="${item.id}">mostrar menos</span>`
+    ? `<span class="collapse-keywords text-xs text-[#c7304f] dark:text-[#f06a8a] hover:text-[#e94560] cursor-pointer font-medium" data-card-id="${item.id}">mostrar menos</span>`
     : '';
-
             card.innerHTML = `
                 <div class="p-5 flex-grow flex flex-col">
                     <div class="flex justify-between items-start mb-1">

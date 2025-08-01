@@ -405,23 +405,23 @@ function renderCards(newsletters) {
             
             const keywordTags = keywordsToShow.map(kw => {
                 const isActive = activeKeywords.includes(kw);
-                const activeClass = isActive ? 'bg-amber-500 text-slate-800 dark:text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-amber-100 hover:text-amber-700 dark:hover:bg-amber-900 dark:hover:text-amber-300';
+                const activeClass = isActive ? 'bg-[#e94560] text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 hover:bg-[#f06a8a] hover:text-white dark:hover:bg-[#c7304f] dark:hover:text-white';
                 return `<span class="tag text-xs px-2 py-0.5 rounded ${activeClass}">${kw}</span>`;
             }).join('');
             
             const remainingCount = item.keywords.length - 3;
-            const expandButton = !isExpanded && remainingCount > 0 
-                ? `<span class="expand-keywords text-xs text-amber-600 dark:text-amber-400 hover:text-amber-500 cursor-pointer font-medium" data-card-id="${item.id}">+${remainingCount} más</span>` 
-                : '';
-            
-            const collapseButton = isExpanded && item.keywords.length > 3
-                ? `<span class="collapse-keywords text-xs text-amber-600 dark:text-amber-400 hover:text-amber-500 cursor-pointer font-medium" data-card-id="${item.id}">mostrar menos</span>`
-                : '';
+            const expandButton = !isExpanded && remainingCount > 0
+    ? `<span class="expand-keywords text-xs text-amber-600 dark:text-amber-400 hover:text-amber-500 cursor-pointer font-medium" data-card-id="${item.id}">+${remainingCount} más</span>`
+    : '';
+
+const collapseButton = isExpanded && item.keywords.length > 3
+    ? `<span class="collapse-keywords text-xs text-amber-600 dark:text-amber-400 hover:text-amber-500 cursor-pointer font-medium" data-card-id="${item.id}">mostrar menos</span>`
+    : '';
 
             card.innerHTML = `
                 <div class="p-5 flex-grow flex flex-col">
                     <div class="flex justify-between items-start mb-1">
-                        <p class="text-sm text-amber-600 dark:text-amber-400 font-semibold">${item.dateInfo.displayDate}</p>
+                        <p class="text-sm text-[#e94560] dark:text-[#f06a8a] font-semibold">${item.dateInfo.displayDate}</p>
                         <button class="share-btn text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 p-1 rounded" 
                                 data-share-id="${item.id}" 
                                 title="Copiar enlace directo">
@@ -446,7 +446,7 @@ function renderCards(newsletters) {
                 </div>
                 ` : ''}
                 <div class="p-4 bg-slate-50 dark:bg-slate-800/50">
-                    <button data-id="${item.id}" class="read-more-btn w-full text-center font-bold text-amber-600 hover:text-amber-500 dark:text-amber-500 dark:hover:text-amber-400 transition-colors">
+                    <button data-id="${item.id}" class="read-more-btn w-full text-center font-bold text-[#c7304f] hover:text-[#e94560] dark:text-[#f06a8a] dark:hover:text-[#e94560] transition-colors">
                         Leer boletín →
                     </button>
                 </div>
